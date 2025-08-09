@@ -1,0 +1,56 @@
+name: Inject action
+inputs:
+  repository:
+    requried: true
+  token:
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Prepare environment
+      shell: bash
+      run: |
+        echo "TARGET_BRANCH_NAME_DESTINATION=master" >> $GITHUB_ENV
+        echo "TARGET_BRANCH_NAME_SOURCE=b-inject" >> $GITHUB_ENV
+        echo "GIT_AUTHOR_EMAIL=github-actions[bot]@users.noreply.github.com" >> $GITHUB_ENV
+        echo "GIT_AUTHOR_NAME=github-actions[bot]" >> $GITHUB_ENV
+        echo "GIT_COMMITTER_EMAIL=github-actions[bot]@users.noreply.github.com" >> $GITHUB_ENV
+        echo "GIT_COMMITTER_NAME=github-actions[bot]" >> $GITHUB_ENV
+
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.repository }}
+        path: ${{ inputs.repository }}
+        token: ${{ inputs.token }}
+
+    - name: Reset target
+      shell: bash
+      working-directory: ./${{ inputs.repository }}
+      run:
+        git push origin --delete "$TARGET_BRANCH_NAME_SOURCE" || true
+
+    - name: Hallucinate content
+      shell: bash
+      working-directory: ./${{ inputs.repository }}
+      run: |
+        date --iso=seconds > content
+
+    - name: Stage content
+      shell: bash
+      working-directory: ./${{ inputs.repository }}
+      run: |
+        git switch --create "$TARGET_BRANCH_NAME_SOURCE"
+        git add content
+
+    - name: Inject content
+      shell: bash
+      working-directory: ./${{ inputs.repository }}
+      run: |
+        git commit -m "Hello from $(cat content)"
+
+    - name: Push change
+      shell: bash
+      working-directory: ./${{ inputs.repository }}
+      run: |
+        git push origin "$TARGET_BRANCH_NAME_SOURCE"
