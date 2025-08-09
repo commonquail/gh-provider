@@ -8,11 +8,11 @@ jobs:
   canary:
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 2
       matrix:
         target:
           - repo: commonquail/gh-consumer-canary1
           - repo: commonquail/gh-consumer-canary2
-        max-parallel: 2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,11 +36,11 @@ jobs:
     needs: manual-approval
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix:
         target:
           - repo: commonquail/gh-consumer-consumer1
           - repo: commonquail/gh-consumer-consumer2
-        max-parallel: 1
     steps:
       - name: Checkout
         uses: actions/checkout@v4
