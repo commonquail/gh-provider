@@ -39,10 +39,6 @@ jobs:
         run: |
           git switch --create b-inject
           git add content
-          git config user.email 'github-actions[bot]@users.noreply.github.com'
-          git config user.name 'github-actions[bot]'
-          git commit -m "Hello from $(cat content)"
-          git push
 
       - name: Inject content
         shell: bash
@@ -56,4 +52,4 @@ jobs:
         shell: bash
         working-directory: ./${{ matrix.target.repo }}
         run: |
-          git push
+          git push origin b-inject
