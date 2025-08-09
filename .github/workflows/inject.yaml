@@ -37,4 +37,4 @@ jobs:
           git switch create b-inject
           git add content
           git commit -m "Hello from $(cat content)"
-          git push origin b-inject
+          git push
