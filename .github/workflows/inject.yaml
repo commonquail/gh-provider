@@ -26,6 +26,10 @@ jobs:
     environment: production
     needs: canary
     runs-on: ubuntu-latest
+    steps:
+      - name: noop
+        shell: bash
+        run: exit 0
 
   inject:
     needs: manual-approval
