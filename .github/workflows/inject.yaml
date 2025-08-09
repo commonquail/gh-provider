@@ -6,7 +6,6 @@ on:
 jobs:
 
   canary:
-    environment: validation
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -23,8 +22,13 @@ jobs:
           repository: ${{ matrix.target.repo }}
           token: ${{ secrets.INJECT_TOKEN }}
 
-  inject:
+  manual-approval:
     environment: production
+    needs: canary
+    runs-on: ubuntu-latest
+
+  inject:
+    needs: manual-approval
     runs-on: ubuntu-latest
     strategy:
       matrix:
