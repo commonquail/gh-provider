@@ -1,0 +1,41 @@
+name: Inject
+on:
+  push:
+    branches:
+      - 'master'
+jobs:
+  inject:
+
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        target:
+          - repo: commonquail/gh-consumer-canary1
+            is_canary: true
+          - repo: commonquail/gh-consumer-canary2
+            is_canary: true
+          - repo: commonquail/gh-consumer-consumer1
+          - repo: commonquail/gh-consumer-consumer2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ matrix.target.repo }}
+          path: ${{ matrix.target.repo }}
+          token: ${{ secrets.INJECT_TOKEN }}
+
+      - name: Inject content
+        shell: bash
+        run: |
+          date --iso=seconds > content
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git config user.name 'github-actions[bot]' 
+          git switch create b-inject
+          git add content
+          git commit -m "Hello from $(cat content)"
+          git push origin b-inject
+        with:
+          working-directory: ./${{ matrix.target.repo }}
