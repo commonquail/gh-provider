@@ -60,3 +60,5 @@ runs:
       working-directory: ./${{ inputs.repository }}
       run: |
         gh pr create --title "$(Generated PR for '$(cat content)')"
+      env:
+        GH_TOKEN: ${{ inputs.token }}
