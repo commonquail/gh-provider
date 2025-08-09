@@ -20,12 +20,24 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Prepare environment
+        shell: bash
+        run: |
+          echo "TARGET_BRANCH_NAME_DESTINATION=master" >> $GITHUB_ENV
+          echo "TARGET_BRANCH_NAME_SOURCE=b-inject" >> $GITHUB_ENV
+
       - name: Checkout
         uses: actions/checkout@v4
         with:
           repository: ${{ matrix.target.repo }}
           path: ${{ matrix.target.repo }}
           token: ${{ secrets.INJECT_TOKEN }}
+
+      - name: Reset target
+        shell: bash
+        working-directory: ./${{ matrix.target.repo }}
+        run:
+          git push origin --delete "$TARGET_BRANCH_NAME_SOURCE" || true
 
       - name: Hallucinate content
         shell: bash
@@ -37,7 +49,7 @@ jobs:
         shell: bash
         working-directory: ./${{ matrix.target.repo }}
         run: |
-          git switch --create b-inject
+          git switch --create "$TARGET_BRANCH_NAME_SOURCE"
           git add content
 
       - name: Inject content
@@ -52,4 +64,4 @@ jobs:
         shell: bash
         working-directory: ./${{ matrix.target.repo }}
         run: |
-          git push origin b-inject
+          git push origin "$TARGET_BRANCH_NAME_SOURCE"
