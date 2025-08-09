@@ -29,6 +29,7 @@ jobs:
 
       - name: Inject content
         shell: bash
+        working-directory: ./${{ matrix.target.repo }}
         run: |
           date --iso=seconds > content
           git config user.email 'github-actions[bot]@users.noreply.github.com'
@@ -37,5 +38,3 @@ jobs:
           git add content
           git commit -m "Hello from $(cat content)"
           git push origin b-inject
-        with:
-          working-directory: ./${{ matrix.target.repo }}
