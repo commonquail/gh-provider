@@ -11,7 +11,7 @@ jobs:
       matrix:
         target:
           - repo: commonquail/gh-consumer-canary1
-          #- repo: commonquail/gh-consumer-canary2
+          - repo: commonquail/gh-consumer-canary2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
       matrix:
         target:
           - repo: commonquail/gh-consumer-consumer1
-          #- repo: commonquail/gh-consumer-consumer2
+          - repo: commonquail/gh-consumer-consumer2
     steps:
       - name: Checkout
         uses: actions/checkout@v4
