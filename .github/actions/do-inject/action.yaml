@@ -54,3 +54,9 @@ runs:
       working-directory: ./${{ inputs.repository }}
       run: |
         git push origin "$TARGET_BRANCH_NAME_SOURCE"
+
+    - name: Create PR
+      shell: bash
+      working-directory: ./${{ inputs.repository }}
+      run: |
+        gh pr create --title "$(Generated PR for '$(cat content)') "$TARGET_BRANCH_NAME_SOURCE"
