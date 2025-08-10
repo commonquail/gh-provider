@@ -59,6 +59,7 @@ runs:
       shell: bash
       working-directory: ./${{ inputs.repository }}
       run: |
-        gh pr create --title "Generated PR for '$(cat content)'" --body 'beep boop bot pr'
+        gh pr create --title "Generated PR for '$(cat content)'" --body "beep boop bot pr by @${INITIATED_BY_LOGIN}"
       env:
         GH_TOKEN: ${{ inputs.token }}
+        INITIATED_BY_LOGIN: ${{ github.actor }}
