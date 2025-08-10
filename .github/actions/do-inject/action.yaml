@@ -59,10 +59,10 @@ runs:
       shell: bash
       working-directory: ./${{ inputs.repository }}
       run: |
-        gh pr create --title "Generated PR for '$(cat content)'" --body "beep boop bot pr by @${INITIATED_BY_LOGIN}
+        gh pr create --title "Generated PR for '$(cat content)'" --body "beep boop bot pr by @${TRIGGERED_BY_LOGIN}
 
         Context info:
-
+        
             github.action=${{ github.action }}
             github.action_path=${{ github.action_path }}
             github.action_ref=${{ github.action_ref }}
@@ -71,10 +71,11 @@ runs:
             github.event_name=${{ github.event_name }}
             github.event_path=${{ github.event_path }}
             github.job=${{ github.job }}
+            github.actor=${{ github.actor }}
             github.triggering_actor=${{ github.triggering_actor }}
             github.workflow=${{ github.workflow }}
             github.workflow_ref=${{ github.workflow_ref }}
         "
       env:
         GH_TOKEN: ${{ inputs.token }}
-        INITIATED_BY_LOGIN: ${{ github.actor }}
+        TRIGGERED_BY_LOGIN: ${{ github.triggering_actor }}
